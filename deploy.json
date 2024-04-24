@@ -1,34 +1,38 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appServicePlanName": {
+            "type": "Azure HOL 1289"
+        },
+        "appServicePlanSku": {
+            "type": "F1"
+        },
+        "webAppName": {
+            "type": "Contact-Database-Application"
+        }
+    },
     "resources": [
         {
-            "type": "Microsoft.Sql/servers",
-            "apiVersion": "2020-08-01-preview",
-            "name": "[parameters('serverName')]",
-            "location": "[parameters('location')]",
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2020-06-01",
+            "name": "[parameters('appServicePlanName')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "[parameters('appServicePlanSku')]"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2020-06-01",
+            "name": "[parameters('webAppName')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]"
+            ],
             "properties": {
-                "administratorLogin": "[parameters('adminLogin')]",
-                "administratorLoginPassword": "[parameters('adminPassword')]"
-            },
-            "resources": [
-                {
-                    "id": "/subscriptions/5832ea51-331e-464f-b220-a49dbbacd632/resourceGroups/GitHub-Copilot-Challenges",
-                    "name": "GitHub-Copilot-Challenges",
-                    "type": "Microsoft.Resources/resourceGroups",
-                    "location": "eastus",
-                    "tags": {
-                        "DeploymentId": "1307904",
-                        "TemplateId": "7982",
-                        "LaunchId": "40050",
-                        "LaunchType": "ON_DEMAND_LAB",
-                        "TenantId": "447"
-                    },
-                    "properties": {
-                        "provisioningState": "Succeeded"
-                    }
-                }
-            ]
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]"
+            }
         }
     ]
 }
