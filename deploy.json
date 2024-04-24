@@ -3,13 +3,16 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "appServicePlanName": {
-            "type": "Azure HOL 1289"
+            "type": "string",
+            "defaultValue": "<Your-App-Service-Plan-Name>"
         },
         "appServicePlanSku": {
-            "type": "F1"
+            "type": "string",
+            "defaultValue": "F1"
         },
         "webAppName": {
-            "type": "Contact-Database-Application"
+            "type": "string",
+            "defaultValue": "<Your-Web-App-Name>"
         }
     },
     "resources": [
